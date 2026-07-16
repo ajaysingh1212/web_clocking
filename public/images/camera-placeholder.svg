@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="480" viewBox="0 0 640 480" role="img" aria-label="Camera preview placeholder">
+  <rect width="640" height="480" rx="20" fill="#f4f8fc"/>
+  <rect x="158" y="142" width="324" height="224" rx="24" fill="#dbe4f0"/>
+  <path d="M244 142l28-42h96l28 42" fill="#dbe4f0"/>
+  <circle cx="320" cy="254" r="66" fill="#0d6efd"/>
+  <circle cx="320" cy="254" r="36" fill="#ffffff"/>
+</svg>
