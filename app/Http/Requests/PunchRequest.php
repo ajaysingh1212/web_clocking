@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class PunchRequest extends FormRequest
 {
@@ -15,13 +14,20 @@ class PunchRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'action' => ['required', Rule::in(['Punch In', 'Punch Out'])],
-            'date' => ['required', 'date_format:Y-m-d'],
-            'time' => ['required', 'date_format:H:i:s'],
-            'latitude' => ['required', 'numeric', 'between:-90,90'],
-            'longitude' => ['required', 'numeric', 'between:-180,180'],
+            'image' => ['required', 'image', 'max:5120'],
+            'latitude' => ['required', 'numeric'],
+            'longitude' => ['required', 'numeric'],
             'location' => ['required', 'string', 'max:500'],
-            'image' => ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'image.required' => 'Please capture a photo before submitting.',
+            'latitude.required' => 'Location not captured yet. Tap refresh and try again.',
+            'longitude.required' => 'Location not captured yet. Tap refresh and try again.',
+            'location.required' => 'Location not captured yet. Tap refresh and try again.',
         ];
     }
 }
