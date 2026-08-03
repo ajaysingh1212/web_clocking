@@ -35,4 +35,6 @@ Route::middleware('api.auth')->group(function (): void {
     Route::get('/report/download', [ReportController::class, 'download'])->name('report.download');
 
     Route::get('/developer-options', [DeveloperController::class, 'index'])->name('developer.index');
+
+    
 });
