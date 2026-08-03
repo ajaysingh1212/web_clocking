@@ -2548,3 +2548,11 @@
 #40 C:/Users/Asus/Documents/dev_clock/vendor/laravel/framework/src/Illuminate/Foundation/resources/server.php(16): require_once('C://Users//Asus//D...')
 #41 {main}
 "} 
+[2026-08-03 14:23:08] local.ERROR: Command "tinker" is not defined. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\CommandNotFoundException(code: 0): Command \"tinker\" is not defined. at D:/WebProjects/web_clocking/vendor/symfony/console/Application.php:745)
+[stacktrace]
+#0 D:/WebProjects/web_clocking/vendor/symfony/console/Application.php(266): Symfony/Component/Console/Application->find('tinker')
+#1 D:/WebProjects/web_clocking/vendor/symfony/console/Application.php(175): Symfony/Component/Console/Application->doRun(Object(Symfony/Component/Console/Input/ArgvInput), Object(Symfony/Component/Console/Output/ConsoleOutput))
+#2 D:/WebProjects/web_clocking/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(201): Symfony/Component/Console/Application->run(Object(Symfony/Component/Console/Input/ArgvInput), Object(Symfony/Component/Console/Output/ConsoleOutput))
+#3 D:/WebProjects/web_clocking/artisan(12): Illuminate/Foundation/Console/Kernel->handle(Object(Symfony/Component/Console/Input/ArgvInput), Object(Symfony/Component/Console/Output/ConsoleOutput))
+#4 {main}
+"} 
