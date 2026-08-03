@@ -36,5 +36,5 @@ Route::middleware('api.auth')->group(function (): void {
 
     Route::get('/developer-options', [DeveloperController::class, 'index'])->name('developer.index');
 
-    
+    // Sanket
 });
