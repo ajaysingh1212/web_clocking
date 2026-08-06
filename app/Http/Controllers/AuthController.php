@@ -97,7 +97,8 @@ class AuthController extends Controller
     {
         if ($remember) {
             $value = encrypt(json_encode($payload));
-            Cookie::queue(cookie('eemot_remember', $value, now()->addDays(30))->httpOnly()->sameSite('lax'));
+            $minutes = 60 * 24 * 30;
+            Cookie::queue(cookie('eemot_remember', $value, $minutes)->httpOnly()->sameSite('lax'));
 
             return;
         }
