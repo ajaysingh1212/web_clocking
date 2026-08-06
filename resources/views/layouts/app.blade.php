@@ -98,6 +98,27 @@
             z-index: 99999;
         }
 
+        .pull-refresh-indicator {
+            position: fixed;
+            top: 12px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-60px);
+            background: rgba(13, 18, 46, 0.95);
+            color: #fff;
+            border: 1px solid rgba(255, 122, 26, 0.35);
+            border-radius: 999px;
+            padding: 8px 12px;
+            font-size: 0.78rem;
+            z-index: 99998;
+            transition: transform 0.2s ease, opacity 0.2s ease;
+            opacity: 0;
+        }
+
+        .pull-refresh-indicator.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
         a { text-decoration: none; }
     </style>
 </head>
@@ -105,6 +126,7 @@
     <div id="page-loader" class="page-loader d-none">
         <div class="spinner-border" style="color:#ff7a1a;" role="status" aria-label="Loading"></div>
     </div>
+    <div id="pull-refresh-indicator" class="pull-refresh-indicator">Pull to refresh</div>
 
     <div class="app-shell">
         @if(token())
@@ -129,6 +151,7 @@
     <script>
         (function () {
             const loader = document.getElementById('page-loader');
+            const pullIndicator = document.getElementById('pull-refresh-indicator');
             if (!loader) return;
 
             function showLoader() {
@@ -138,6 +161,58 @@
             function hideLoader() {
                 loader.classList.add('d-none');
             }
+
+            let pullStartY = 0;
+            let pullDistance = 0;
+            let isPulling = false;
+
+            function resetPull() {
+                pullDistance = 0;
+                isPulling = false;
+                if (pullIndicator) {
+                    pullIndicator.classList.remove('show');
+                }
+            }
+
+            document.addEventListener('touchstart', function (event) {
+                if (window.scrollY > 0 || event.touches.length !== 1) {
+                    return;
+                }
+
+                pullStartY = event.touches[0].clientY;
+                isPulling = true;
+            }, { passive: true });
+
+            document.addEventListener('touchmove', function (event) {
+                if (!isPulling || window.scrollY > 0 || event.touches.length !== 1) {
+                    return;
+                }
+
+                const currentY = event.touches[0].clientY;
+                const delta = currentY - pullStartY;
+
+                if (delta > 0) {
+                    pullDistance = Math.min(delta, 120);
+                    if (pullIndicator) {
+                        pullIndicator.textContent = pullDistance > 80 ? 'Release to refresh' : 'Pull to refresh';
+                        pullIndicator.classList.toggle('show', pullDistance > 20);
+                    }
+                    event.preventDefault();
+                }
+            }, { passive: false });
+
+            document.addEventListener('touchend', function () {
+                if (!isPulling) {
+                    return;
+                }
+
+                if (pullDistance > 80) {
+                    showLoader();
+                    window.location.reload();
+                }
+
+                resetPull();
+            });
 
             // Hide loader once the page has fully rendered
             window.addEventListener('DOMContentLoaded', hideLoader);
