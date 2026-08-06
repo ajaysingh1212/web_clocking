@@ -337,7 +337,7 @@
     <p class="hint">Quick access to user account and reports.</p>
 
     <div class="menu-list">
-        <a href="#" class="menu-item">
+        <a href="<?php echo e(route('notifications')); ?>" class="menu-item">
             <div class="menu-left">
                 <i class="bi bi-bell-fill menu-icon"></i>
                 <div class="menu-text">
@@ -359,7 +359,7 @@
             <i class="bi bi-chevron-right menu-chevron"></i>
         </a>
 
-        <a href="#" class="menu-item">
+        <a href="<?php echo e(route('leave')); ?>" class="menu-item">
             <div class="menu-left">
                 <i class="bi bi-calendar2-plus-fill menu-icon"></i>
                 <div class="menu-text">
@@ -381,12 +381,23 @@
             <i class="bi bi-chevron-right menu-chevron"></i>
         </a>
 
-        <a href="#" class="menu-item">
+        <a href="<?php echo e(route('settings.documents')); ?>" class="menu-item">
+            <div class="menu-left">
+                <i class="bi bi-file-earmark-text-fill menu-icon"></i>
+                <div class="menu-text">
+                    <strong>Documents</strong>
+                    <span>Download legal documents</span>
+                </div>
+            </div>
+            <i class="bi bi-chevron-right menu-chevron"></i>
+        </a>
+
+        <a href="<?php echo e(route('settings.email-reports')); ?>" class="menu-item">
             <div class="menu-left">
                 <i class="bi bi-envelope-fill menu-icon"></i>
                 <div class="menu-text">
                     <strong>Email Reports</strong>
-                    <span>Get reports sent to your email</span>
+                    <span>Send reports directly to your email</span>
                 </div>
             </div>
             <i class="bi bi-chevron-right menu-chevron"></i>

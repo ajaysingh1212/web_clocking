@@ -1,8 +1,8 @@
-@extends('layouts.app')
 
-@section('title', 'Leave History | EEMOT Clocking PWA')
 
-@section('content')
+<?php $__env->startSection('title', 'Leave History | EEMOT Clocking PWA'); ?>
+
+<?php $__env->startSection('content'); ?>
 <style>
     .leave-shell { display: flex; flex-direction: column; gap: 14px; }
     .leave-hero {
@@ -57,9 +57,9 @@
     .action-button i { color: var(--accent-orange); font-size: 18px; }
 </style>
 
-@if($apiError ?? null)
-    <div class="alert alert-warning">{{ $apiError }}</div>
-@endif
+<?php if($apiError ?? null): ?>
+    <div class="alert alert-warning"><?php echo e($apiError); ?></div>
+<?php endif; ?>
 
 <div class="leave-shell">
     <section class="leave-hero">
@@ -74,15 +74,15 @@
     <section class="leave-card">
         <div class="stats-row">
             <div class="stat-box">
-                <span class="value">{{ data_get($leaveCounts, 'pending', 0) }}</span>
+                <span class="value"><?php echo e(data_get($leaveCounts, 'pending', 0)); ?></span>
                 <span class="label">Pending</span>
             </div>
             <div class="stat-box">
-                <span class="value">{{ data_get($leaveCounts, 'approved', 0) }}</span>
+                <span class="value"><?php echo e(data_get($leaveCounts, 'approved', 0)); ?></span>
                 <span class="label">Approved</span>
             </div>
             <div class="stat-box">
-                <span class="value">{{ data_get($leaveCounts, 'reject', 0) }}</span>
+                <span class="value"><?php echo e(data_get($leaveCounts, 'reject', 0)); ?></span>
                 <span class="label">Rejected</span>
             </div>
         </div>
@@ -90,26 +90,29 @@
         <h3>Recent Requests</h3>
         <p class="hint">Your complete leave history appears here.</p>
 
-        @if(!empty($leaveRequests))
-            @foreach($leaveRequests as $leave)
+        <?php if(!empty($leaveRequests)): ?>
+            <?php $__currentLoopData = $leaveRequests; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $leave): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <div class="history-item">
                     <div class="history-top">
-                        <strong>{{ data_get($leave, 'title') ?: 'Leave Request' }}</strong>
-                        <span class="status-pill status-{{ data_get($leave, 'status', 'pending') }}">{{ data_get($leave, 'status_label') ?: ucfirst((string) data_get($leave, 'status', 'Pending')) }}</span>
+                        <strong><?php echo e(data_get($leave, 'title') ?: 'Leave Request'); ?></strong>
+                        <span class="status-pill status-<?php echo e(data_get($leave, 'status', 'pending')); ?>"><?php echo e(data_get($leave, 'status_label') ?: ucfirst((string) data_get($leave, 'status', 'Pending'))); ?></span>
                     </div>
                     <div class="history-meta">
-                        {{ data_get($leave, 'date_from') }} to {{ data_get($leave, 'date_to') }}
+                        <?php echo e(data_get($leave, 'date_from')); ?> to <?php echo e(data_get($leave, 'date_to')); ?>
+
                     </div>
                     <div class="history-desc">
-                        {{ data_get($leave, 'description') ?: 'No additional note provided.' }}
+                        <?php echo e(data_get($leave, 'description') ?: 'No additional note provided.'); ?>
+
                     </div>
                 </div>
-            @endforeach
-        @else
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+        <?php else: ?>
             <div class="history-item">
                 <div class="history-desc">No leave history available yet.</div>
             </div>
-        @endif
+        <?php endif; ?>
     </section>
 </div>
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\WebProjects\web_clocking\resources\views/leave/history.blade.php ENDPATH**/ ?>

@@ -1,8 +1,8 @@
-@extends('layouts.app')
 
-@section('title', 'Apply Leave | EEMOT Clocking PWA')
 
-@section('content')
+<?php $__env->startSection('title', 'Apply Leave | EEMOT Clocking PWA'); ?>
+
+<?php $__env->startSection('content'); ?>
 <style>
     .leave-shell { display: flex; flex-direction: column; gap: 14px; }
     .leave-hero {
@@ -105,17 +105,18 @@
         <h3>New Leave Request</h3>
         <p class="hint">Fill in the details and send your request.</p>
 
-        <form method="POST" action="{{ route('leave.store') }}" class="leave-form-grid">
-            @csrf
+        <form method="POST" action="<?php echo e(route('leave.store')); ?>" class="leave-form-grid">
+            <?php echo csrf_field(); ?>
             <div class="select-field">
                 <label for="leave_type">Leave Type</label>
                 <select id="leave_type" name="leave_type" class="leave-type-select" required>
                     <option value="">Select leave type</option>
-                    @foreach(data_get($leaveTypes, [], []) as $leaveType)
-                        <option value="{{ data_get($leaveType, 'id') }}" {{ old('leave_type') === (string) data_get($leaveType, 'id') ? 'selected' : '' }}>
-                            {{ data_get($leaveType, 'name') }}
+                    <?php $__currentLoopData = data_get($leaveTypes, [], []); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $leaveType): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <option value="<?php echo e(data_get($leaveType, 'id')); ?>" <?php echo e(old('leave_type') === (string) data_get($leaveType, 'id') ? 'selected' : ''); ?>>
+                            <?php echo e(data_get($leaveType, 'name')); ?>
+
                         </option>
-                    @endforeach
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </select>
             </div>
 
@@ -142,4 +143,5 @@
     </section>
 
 </div>
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\WebProjects\web_clocking\resources\views/leave/apply.blade.php ENDPATH**/ ?>

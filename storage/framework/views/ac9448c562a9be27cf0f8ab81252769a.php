@@ -1,8 +1,8 @@
-@extends('layouts.app')
 
-@section('title', 'Leave Overview | EEMOT Clocking PWA')
 
-@section('content')
+<?php $__env->startSection('title', 'Leave Overview | EEMOT Clocking PWA'); ?>
+
+<?php $__env->startSection('content'); ?>
 <style>
     .leave-hero {
         background: linear-gradient(135deg, rgba(255,122,26,0.12), rgba(122,58,255,0.12));
@@ -115,22 +115,22 @@
 
             <div class="stats-row">
                 <div class="stat-box">
-                    <span class="value">{{ data_get($leaveCounts, 'pending', 0) }}</span>
+                    <span class="value"><?php echo e(data_get($leaveCounts, 'pending', 0)); ?></span>
                     <span class="label">Pending</span>
                 </div>
                 <div class="stat-box">
-                    <span class="value">{{ data_get($leaveCounts, 'approved', 0) }}</span>
+                    <span class="value"><?php echo e(data_get($leaveCounts, 'approved', 0)); ?></span>
                     <span class="label">Approved</span>
                 </div>
                 <div class="stat-box">
-                    <span class="value">{{ data_get($leaveCounts, 'reject', 0) }}</span>
+                    <span class="value"><?php echo e(data_get($leaveCounts, 'reject', 0)); ?></span>
                     <span class="label">Rejected</span>
                 </div>
             </div>
 
             <div class="card-actions">
-                <a href="{{ route('leave.apply') }}" class="hero-button primary">Apply leave</a>
-                <a href="{{ route('leave.history') }}" class="hero-button secondary">Leave history</a>
+                <a href="<?php echo e(route('leave.apply')); ?>" class="hero-button primary">Apply leave</a>
+                <a href="<?php echo e(route('leave.history')); ?>" class="hero-button secondary">Leave history</a>
             </div>
         </section>
 
@@ -140,7 +140,7 @@
                     <h3>Paid Leave Tracker</h3>
                     <p class="tracker-copy">Each month you get one paid leave day. Track how much has been used and how much remains.</p>
                 </div>
-                <span class="summary-badge">{{ data_get($leaveStats, 'used_paid_leave', 0) }}/{{ data_get($leaveStats, 'paid_leave_limit', 1) }} Used</span>
+                <span class="summary-badge"><?php echo e(data_get($leaveStats, 'used_paid_leave', 0)); ?>/<?php echo e(data_get($leaveStats, 'paid_leave_limit', 1)); ?> Used</span>
             </div>
 
             <div class="analytics-card">
@@ -149,23 +149,23 @@
                         <p class="analytics-title">Leave usage</p>
                         <p class="analytics-subtitle">A clear view of pay leave used versus remaining balance.</p>
                     </div>
-                    <span class="summary-badge">{{ data_get($leaveStats, 'pending', 0) }} pending</span>
+                    <span class="summary-badge"><?php echo e(data_get($leaveStats, 'pending', 0)); ?> pending</span>
                 </div>
 
                 <div class="bar-chart">
                     <div class="bar-item">
                         <span class="bar-label">Used</span>
                         <div class="bar-track">
-                            <div class="bar-fill" style="width: {{ min(100, max(0, intval((data_get($leaveStats, 'used_paid_leave', 0) / max(1, data_get($leaveStats, 'paid_leave_limit', 1))) * 100))) }}%;"></div>
+                            <div class="bar-fill" style="width: <?php echo e(min(100, max(0, intval((data_get($leaveStats, 'used_paid_leave', 0) / max(1, data_get($leaveStats, 'paid_leave_limit', 1))) * 100)))); ?>%;"></div>
                         </div>
-                        <span class="bar-value">{{ data_get($leaveStats, 'used_paid_leave', 0) }}d</span>
+                        <span class="bar-value"><?php echo e(data_get($leaveStats, 'used_paid_leave', 0)); ?>d</span>
                     </div>
                     <div class="bar-item">
                         <span class="bar-label">Remaining</span>
                         <div class="bar-track">
-                            <div class="bar-fill" style="width: {{ min(100, max(0, intval((data_get($leaveStats, 'remaining_paid_leave', 0) / max(1, data_get($leaveStats, 'paid_leave_limit', 1))) * 100))) }}%; background: rgba(255,255,255,0.35);"></div>
+                            <div class="bar-fill" style="width: <?php echo e(min(100, max(0, intval((data_get($leaveStats, 'remaining_paid_leave', 0) / max(1, data_get($leaveStats, 'paid_leave_limit', 1))) * 100)))); ?>%; background: rgba(255,255,255,0.35);"></div>
                         </div>
-                        <span class="bar-value">{{ data_get($leaveStats, 'remaining_paid_leave', 0) }}d</span>
+                        <span class="bar-value"><?php echo e(data_get($leaveStats, 'remaining_paid_leave', 0)); ?>d</span>
                     </div>
                 </div>
 
@@ -179,4 +179,5 @@
 
     </div>
 </div>
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\WebProjects\web_clocking\resources\views/leave/index.blade.php ENDPATH**/ ?>

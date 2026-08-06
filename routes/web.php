@@ -29,12 +29,16 @@ Route::middleware('api.auth')->group(function (): void {
     Route::get('/logout', [AuthController::class, 'logout']);
 
     Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
+    Route::get('/settings/documents', [SettingsController::class, 'documents'])->name('settings.documents');
     Route::get('/notifications', [SettingsController::class, 'notifications'])->name('notifications');
     Route::get('/leave', [SettingsController::class, 'leaveLanding'])->name('leave');
     Route::get('/leave/apply', [SettingsController::class, 'leaveApply'])->name('leave.apply');
     Route::get('/leave/history', [SettingsController::class, 'leaveHistory'])->name('leave.history');
     Route::post('/leave', [SettingsController::class, 'storeLeave'])->name('leave.store');
     Route::put('/settings/password', [SettingsController::class, 'updatePassword'])->name('password.update');
+
+    Route::get('/settings/email-reports', [SettingsController::class, 'emailReports'])->name('settings.email-reports');
+    Route::post('/settings/email-reports', [SettingsController::class, 'sendEmailReport'])->name('settings.email-reports.send');
 
     Route::get('/report', [ReportController::class, 'index'])->name('report');
     Route::get('/report/download', [ReportController::class, 'download'])->name('report.download');

@@ -7,6 +7,7 @@ use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\Response;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use RuntimeException;
 
@@ -33,6 +34,35 @@ class ApiService
         return $this->request()
             ->get("attendance/calendar/{$userId}", ['month' => $month])
             ->json() ?? [];
+    }
+
+    public function sendMonthlyAttendanceReport(int|string $userId, int|string $month, int|string $year, string $email): array
+    {
+        $response = $this->request()->post('attendance/send-monthly-report', [
+            'user_id' => $userId,
+            'month' => (int) $month,
+            'year' => (int) $year,
+            'email' => $email,
+            'password' => config('services.eemot_api.password'),
+        ]);
+
+        $body = $response->json() ?? [];
+
+        // Log non-200 or unsuccessful payloads for debugging remote server errors
+        if (! $response->successful() || ! data_get($body, 'success', true)) {
+            Log::error('sendMonthlyAttendanceReport API call failed', [
+                'status' => $response->status(),
+                'body' => $body,
+                'request' => [
+                    'user_id' => $userId,
+                    'month' => (int) $month,
+                    'year' => (int) $year,
+                    'email' => $email,
+                ],
+            ]);
+        }
+
+        return $body;
     }
 
     public function userDetails(int|string $userId): array
@@ -69,6 +99,16 @@ class ApiService
     public function leaveRequestsByUser(int|string $userId): array
     {
         return $this->request()->get("leave-requests-by-user/{$userId}")->json() ?? [];
+    }
+
+    public function leaveTypes(): array
+    {
+        return $this->request()->get('leave-types')->json() ?? [];
+    }
+
+    public function submitLeave(array $payload): array
+    {
+        return $this->request()->post('submit-leave-request', $payload)->json() ?? [];
     }
 
     private function guest(): PendingRequest

@@ -266,6 +266,44 @@
         transform: translateX(3px);
     }
 
+    .install-card {
+        margin-top: 16px;
+        border: 1px solid rgba(255, 122, 26, 0.25);
+        background: rgba(255, 122, 26, 0.08);
+        border-radius: 14px;
+        padding: 10px 12px;
+    }
+
+    .install-card .install-btn {
+        width: 100%;
+        border: none;
+        border-radius: 12px;
+        padding: 10px 12px;
+        font-weight: 700;
+        color: #fff;
+        background: linear-gradient(120deg, #ff7a1a, #7a3aff);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        font-size: 0.84rem;
+    }
+
+    .install-help {
+        margin-top: 7px;
+        font-size: 0.72rem;
+        color: #a3adc2;
+        text-align: center;
+        line-height: 1.35;
+    }
+
+    .install-help .install-link {
+        color: #ff9a4d;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+    }
+
     .login-error {
         border: 1px solid rgba(255, 90, 90, 0.3);
         border-radius: 14px;
@@ -341,6 +379,16 @@
                     <span>Login</span>
                     <span class="material-symbols-rounded">arrow_forward</span>
                 </button>
+
+                <div class="install-card">
+                    <button type="button" id="install-button" class="install-btn d-none">
+                        <span class="material-symbols-rounded">download</span>
+                        <span>Install Now</span>
+                    </button>
+                    <div class="install-help">
+                        Tap <span class="install-link" id="install-link">click here</span> to install this app.
+                    </div>
+                </div>
             </form>
         </div>
     </div>
