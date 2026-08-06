@@ -1,8 +1,8 @@
-@extends('layouts.app')
 
-@section('title', 'Punch Attendance | EEMOT Clocking PWA')
 
-@section('content')
+<?php $__env->startSection('title', 'Punch Attendance | EEMOT Clocking PWA'); ?>
+
+<?php $__env->startSection('content'); ?>
 <style>
     .punch-hero {
         background: linear-gradient(135deg, rgba(255,122,26,0.12), rgba(122,58,255,0.12));
@@ -294,16 +294,16 @@
     <div>
         <p class="eyebrow mb-1">Attendance</p>
         <h1>Punch Now</h1>
-        <span>{{ employeeName() }} / {{ data_get(employee(), 'employee_code', '-') }}</span>
+        <span><?php echo e(employeeName()); ?> / <?php echo e(data_get(employee(), 'employee_code', '-')); ?></span>
     </div>
     <i class="bi bi-camera-fill"></i>
 </section>
 
-<form method="POST" action="{{ route('punch.store') }}" enctype="multipart/form-data" class="needs-loader punch-form" id="punch-form">
-    @csrf
+<form method="POST" action="<?php echo e(route('punch.store')); ?>" enctype="multipart/form-data" class="needs-loader punch-form" id="punch-form">
+    <?php echo csrf_field(); ?>
 
     <section class="capture-card">
-        <img id="photo-preview" class="photo-preview" src="{{ asset('images/camera-placeholder.svg') }}" alt="Photo preview">
+        <img id="photo-preview" class="photo-preview" src="<?php echo e(asset('images/camera-placeholder.svg')); ?>" alt="Photo preview">
         <label class="capture-button" for="image">
             <i class="bi bi-camera"></i>
             Capture Photo
@@ -328,29 +328,30 @@
         <div class="quick-grid">
             <div class="metric">
                 <span>Latitude</span>
-                <input id="latitude" name="latitude" class="ghost-input" value="{{ old('latitude') }}" readonly required>
+                <input id="latitude" name="latitude" class="ghost-input" value="<?php echo e(old('latitude')); ?>" readonly required>
             </div>
             <div class="metric">
                 <span>Longitude</span>
-                <input id="longitude" name="longitude" class="ghost-input" value="{{ old('longitude') }}" readonly required>
+                <input id="longitude" name="longitude" class="ghost-input" value="<?php echo e(old('longitude')); ?>" readonly required>
             </div>
         </div>
 
         <div class="location-box mt-3"
-             data-branch-lat="{{ data_get(branch(), 'latitude') }}"
-             data-branch-lng="{{ data_get(branch(), 'longitude') }}"
-             data-radius="{{ data_get(employee(), 'attendance_radius_meter', 0) }}">
+             data-branch-lat="<?php echo e(data_get(branch(), 'latitude')); ?>"
+             data-branch-lng="<?php echo e(data_get(branch(), 'longitude')); ?>"
+             data-radius="<?php echo e(data_get(employee(), 'attendance_radius_meter', 0)); ?>">
             <label for="location">Current Location</label>
-            <textarea id="location" name="location" rows="3" readonly required>{{ old('location') }}</textarea>
+            <textarea id="location" name="location" rows="3" readonly required><?php echo e(old('location')); ?></textarea>
             <p class="location-status" id="location-status">
                 <i class="bi bi-geo-alt"></i> Fetching your location…
             </p>
             <div class="location-distance" id="location-distance"></div>
-            @if ($errors->has('location'))
+            <?php if($errors->has('location')): ?>
                 <div class="location-error show">
-                    {{ $errors->first('location') }}
+                    <?php echo e($errors->first('location')); ?>
+
                 </div>
-            @endif
+            <?php endif; ?>
         </div>
 
         <div class="action-row">
@@ -364,8 +365,9 @@
         </div>
     </section>
 </form>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('scripts')
-    <script src="{{ asset('js/punch.js') }}?v={{ filemtime(public_path('js/punch.js')) }}"></script>
-@endpush
+<?php $__env->startPush('scripts'); ?>
+    <script src="<?php echo e(asset('js/punch.js')); ?>?v=<?php echo e(filemtime(public_path('js/punch.js'))); ?>"></script>
+<?php $__env->stopPush(); ?>
+<?php echo $__env->make('layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\WebProjects\web_clocking\resources\views/attendance/punch.blade.php ENDPATH**/ ?>

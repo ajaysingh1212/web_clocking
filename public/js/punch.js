@@ -5,6 +5,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const lngInput = document.getElementById('longitude');
     const locationInput = document.getElementById('location');
     const statusEl = document.getElementById('location-status');
+    const distanceEl = document.getElementById('location-distance');
+    const locationBox = document.querySelector('.location-box');
     const refreshBtn = document.getElementById('refresh-location');
     const imageInput = document.getElementById('image');
     const photoPreview = document.getElementById('photo-preview');
@@ -13,6 +15,29 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!statusEl) return;
         statusEl.className = 'location-status' + (type ? ' ' + type : '');
         statusEl.innerHTML = '<i class="bi bi-geo-alt"></i> ' + message;
+    }
+
+    function setDistanceStatus(message, type) {
+        if (!distanceEl) return;
+        distanceEl.className = 'location-distance' + (type ? ' ' + type : '');
+        distanceEl.textContent = message;
+        distanceEl.style.display = 'block';
+    }
+
+    function getDistanceInMeters(lat1, lon1, lat2, lon2) {
+        const earthRadius = 6371000;
+        const lat1Rad = lat1 * Math.PI / 180;
+        const lat2Rad = lat2 * Math.PI / 180;
+        const deltaLat = (lat2 - lat1) * Math.PI / 180;
+        const deltaLon = (lon2 - lon1) * Math.PI / 180;
+
+        const a = Math.sin(deltaLat / 2) * Math.sin(deltaLat / 2)
+            + Math.cos(lat1Rad) * Math.cos(lat2Rad)
+            * Math.sin(deltaLon / 2) * Math.sin(deltaLon / 2);
+
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+        return earthRadius * c;
     }
 
     // Live running clock — display only, not submitted with the form
@@ -36,28 +61,43 @@ document.addEventListener('DOMContentLoaded', function () {
         setInterval(tick, 1000);
     }
 
-    // Build a clean, accurate address string from Nominatim's structured
-    // address components instead of relying on display_name, which can
-    // pull a mismatched / stale postcode from a wider boundary.
+    // Build a clean, accurate address string using Nominatim's structured
+    // address data so the punch entry includes the area, locality, district,
+    // state, and postcode in a more complete and stable format.
     function buildAddress(address) {
         if (!address) return null;
 
         const line1 = [
             address.house_number,
-            address.road || address.pedestrian || address.footway,
+            address.road || address.pedestrian || address.footway || address.path,
         ].filter(Boolean).join(' ');
 
-        const locality = address.suburb || address.neighbourhood || address.quarter;
+        const area = [
+            address.suburb,
+            address.neighbourhood,
+            address.quarter,
+            address.hamlet,
+            address.village,
+            address.town,
+            address.city,
+            address.municipality,
+        ].filter(Boolean).filter((value, index, list) => list.indexOf(value) === index);
 
-        const city = address.city || address.town || address.village || address.county;
+        const city = address.city || address.town || address.village || address.county || address.municipality;
+        const district = address.state_district || address.county;
+        const state = address.state;
+        const postcode = address.postcode;
+        const country = address.country;
 
         const parts = [
             line1,
-            locality,
+            ...area,
             city,
-            address.state,
-            address.postcode,
-        ].filter(Boolean);
+            district,
+            state,
+            postcode,
+            country,
+        ].filter(Boolean).filter((value, index, list) => list.indexOf(value) === index);
 
         return parts.length ? parts.join(', ') : null;
     }
@@ -127,6 +167,21 @@ document.addEventListener('DOMContentLoaded', function () {
                 const address = await reverseGeocode(lat, lng);
 
                 if (locationInput) locationInput.value = address;
+
+                const branchLat = parseFloat(locationBox && locationBox.dataset.branchLat);
+                const branchLng = parseFloat(locationBox && locationBox.dataset.branchLng);
+                const radiusLimit = parseInt(locationBox && locationBox.dataset.radius, 10) || 0;
+
+                if (branchLat && branchLng && radiusLimit > 0) {
+                    const distance = getDistanceInMeters(parseFloat(lat), parseFloat(lng), branchLat, branchLng);
+                    const roundedDistance = Math.round(distance);
+
+                    if (roundedDistance <= radiusLimit) {
+                        setDistanceStatus(`Attendance allowed: you are within the ${radiusLimit} m radius (${roundedDistance} m from branch).`, 'success');
+                    } else {
+                        setDistanceStatus(`Attendance not allowed: you are outside the ${radiusLimit} m radius (${roundedDistance} m from branch).`, 'error');
+                    }
+                }
 
                 setStatus('Location captured.', 'success');
             },
