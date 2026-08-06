@@ -2,11 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\ApiService;
+use Illuminate\View\View;
+
 class SettingsController extends Controller
 {
-    public function index()
+    public function index(): View
     {
-        return view('settings'); // resources/views/settings.blade.php — 'settings.index' nahi
+        return view('settings');
+    }
+
+    public function notifications(ApiService $api): View
+    {
+        $response = $api->notifications();
+        $notifications = data_get($response, 'data', []);
+
+        return view('notifications.index', [
+            'notifications' => $notifications,
+            'apiError' => data_get($response, 'message') && ! data_get($response, 'status') ? data_get($response, 'message') : null,
+        ]);
     }
 
     public function updatePassword()

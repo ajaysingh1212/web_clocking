@@ -29,6 +29,7 @@ Route::middleware('api.auth')->group(function (): void {
     Route::get('/logout', [AuthController::class, 'logout']);
 
     Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
+    Route::get('/notifications', [SettingsController::class, 'notifications'])->name('notifications');
     Route::put('/settings/password', [SettingsController::class, 'updatePassword'])->name('password.update');
 
     Route::get('/report', [ReportController::class, 'index'])->name('report');

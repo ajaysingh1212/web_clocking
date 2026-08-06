@@ -337,7 +337,7 @@
     <p class="hint">Quick access to user account and reports.</p>
 
     <div class="menu-list">
-        <a href="#" class="menu-item">
+        <a href="{{ route('notifications') }}" class="menu-item">
             <div class="menu-left">
                 <i class="bi bi-bell-fill menu-icon"></i>
                 <div class="menu-text">

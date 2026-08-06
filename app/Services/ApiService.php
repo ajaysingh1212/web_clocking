@@ -61,6 +61,11 @@ class ApiService
         return $this->request()->get("products/{$id}")->json() ?? [];
     }
 
+    public function notifications(): array
+    {
+        return $this->guest()->get('all-notifications')->json() ?? [];
+    }
+
     private function guest(): PendingRequest
     {
         return Http::baseUrl(config('services.eemot_api.base_url'))
