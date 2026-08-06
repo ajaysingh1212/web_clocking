@@ -30,7 +30,9 @@ Route::middleware('api.auth')->group(function (): void {
 
     Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
     Route::get('/notifications', [SettingsController::class, 'notifications'])->name('notifications');
-    Route::get('/leave', [SettingsController::class, 'leaveRequests'])->name('leave');
+    Route::get('/leave', [SettingsController::class, 'leaveLanding'])->name('leave');
+    Route::get('/leave/apply', [SettingsController::class, 'leaveApply'])->name('leave.apply');
+    Route::get('/leave/history', [SettingsController::class, 'leaveHistory'])->name('leave.history');
     Route::post('/leave', [SettingsController::class, 'storeLeave'])->name('leave.store');
     Route::put('/settings/password', [SettingsController::class, 'updatePassword'])->name('password.update');
 

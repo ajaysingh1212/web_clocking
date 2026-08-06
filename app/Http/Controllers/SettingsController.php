@@ -25,7 +25,22 @@ class SettingsController extends Controller
         ]);
     }
 
-    public function leaveRequests(ApiService $api): View
+    public function leaveLanding(ApiService $api): View
+    {
+        return view('leave.index', $this->leaveViewData($api));
+    }
+
+    public function leaveApply(ApiService $api): View
+    {
+        return view('leave.apply', $this->leaveViewData($api));
+    }
+
+    public function leaveHistory(ApiService $api): View
+    {
+        return view('leave.history', $this->leaveViewData($api));
+    }
+
+    private function leaveViewData(ApiService $api): array
     {
         $userId = authUserId();
         $response = [];
@@ -38,11 +53,11 @@ class SettingsController extends Controller
             }
         }
 
-        return view('leave.index', [
+        return [
             'leaveRequests' => data_get($response, 'data', []),
             'leaveCounts' => data_get($response, 'counts', []),
             'apiError' => data_get($response, 'message') && ! data_get($response, 'success') ? data_get($response, 'message') : null,
-        ]);
+        ];
     }
 
     public function storeLeave(Request $request): RedirectResponse
