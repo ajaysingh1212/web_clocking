@@ -12,12 +12,14 @@
         padding: 20px;
         display: flex;
         align-items: center;
+        justify-content: space-between;
         gap: 14px;
     }
     .leave-hero-icon {
         width: 50px; height: 50px; border-radius: 16px; background: var(--grad-main);
         display: flex; align-items: center; justify-content: center; font-size: 22px; color: #fff;
         box-shadow: 0 10px 24px rgba(255,90,60,0.3);
+        flex-shrink: 0;
     }
     .leave-hero .eyebrow { text-transform: uppercase; font-size: 0.7rem; letter-spacing: 0.5px; color: var(--text-dim); font-weight: 600; }
     .leave-hero h1 { color: #fff; font-weight: 800; font-size: 1.28rem; margin: 2px 0 4px; }
