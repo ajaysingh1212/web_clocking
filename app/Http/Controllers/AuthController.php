@@ -7,6 +7,7 @@ use App\Services\ApiService;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 use RuntimeException;
@@ -15,6 +16,8 @@ class AuthController extends Controller
 {
     public function login(): View|RedirectResponse
     {
+        $this->restoreRememberedSession();
+
         if (token()) {
             return redirect()->route('home');
         }
@@ -26,8 +29,10 @@ class AuthController extends Controller
     {
         try {
             $response = $api->login($request->only('email', 'password'));
-            $this->storeApiSession($response, $request->boolean('remember'));
+            $remember = $request->boolean('remember');
+            $this->storeApiSession($response, $remember);
             $this->syncUserDetails($api);
+            $this->rememberLogin(apiSession(), $remember);
 
             return redirect()->route('home')->with('success', 'Signed in successfully.');
         } catch (RequestException $exception) {
@@ -50,11 +55,12 @@ class AuthController extends Controller
         session()->forget('api.auth');
         session()->invalidate();
         session()->regenerateToken();
+        Cookie::queue(Cookie::forget('eemot_remember'));
 
         return redirect()->route('login')->with('success', 'Signed out successfully.');
     }
 
-    private function storeApiSession(array $response, bool $remember): void
+    private function storeApiSession(array $response, bool $remember): array
     {
         $user = data_get($response, 'user', []);
         $employee = data_get($response, 'employee') ?: data_get($user, 'employee', []);
@@ -83,6 +89,44 @@ class AuthController extends Controller
 
         session(['api.auth' => $payload]);
         session()->regenerate();
+
+        return $payload;
+    }
+
+    private function rememberLogin(array $payload, bool $remember): void
+    {
+        if ($remember) {
+            $value = encrypt(json_encode($payload));
+            Cookie::queue(cookie('eemot_remember', $value, now()->addDays(30))->httpOnly()->sameSite('lax'));
+
+            return;
+        }
+
+        Cookie::queue(Cookie::forget('eemot_remember'));
+    }
+
+    private function restoreRememberedSession(): void
+    {
+        if (token()) {
+            return;
+        }
+
+        $remembered = request()->cookie('eemot_remember');
+
+        if (! $remembered) {
+            return;
+        }
+
+        try {
+            $payload = json_decode(decrypt($remembered), true);
+
+            if (! empty($payload['token'])) {
+                session(['api.auth' => $payload]);
+                session()->regenerate();
+            }
+        } catch (\Throwable $exception) {
+            Cookie::queue(Cookie::forget('eemot_remember'));
+        }
     }
 
     private function syncUserDetails(ApiService $api): void

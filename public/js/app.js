@@ -1,6 +1,7 @@
 (function () {
     const loader = document.getElementById('page-loader');
     const forms = document.querySelectorAll('.needs-loader');
+    const installButton = document.getElementById('install-button');
     let deferredPrompt = null;
 
     forms.forEach((form) => {
@@ -24,7 +25,6 @@
     window.addEventListener('beforeinstallprompt', (event) => {
         event.preventDefault();
         deferredPrompt = event;
-        const installButton = document.getElementById('install-button');
         if (installButton) {
             installButton.classList.remove('d-none');
             installButton.addEventListener('click', async () => {
