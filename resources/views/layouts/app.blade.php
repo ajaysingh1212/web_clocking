@@ -40,7 +40,8 @@
             font-family: 'Poppins', sans-serif;
             color: var(--text-main);
             min-height: 100%;
-            overflow: hidden;
+            overflow-x: hidden;
+            overflow-y: auto;
             touch-action: manipulation;
             -webkit-text-size-adjust: 100%;
             -webkit-user-select: none;
@@ -49,8 +50,7 @@
 
         body {
             position: relative;
-            overflow-x: hidden;
-            overscroll-behavior: none;
+            overscroll-behavior-y: auto;
         }
 
         body::before {
