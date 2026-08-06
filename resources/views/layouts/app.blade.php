@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="theme-color" content="#0a0f2c">
     <title>@yield('title', 'EEMOT Clocking PWA')</title>
@@ -40,11 +40,17 @@
             font-family: 'Poppins', sans-serif;
             color: var(--text-main);
             min-height: 100%;
+            overflow: hidden;
+            touch-action: manipulation;
+            -webkit-text-size-adjust: 100%;
+            -webkit-user-select: none;
+            -webkit-touch-callout: none;
         }
 
         body {
             position: relative;
             overflow-x: hidden;
+            overscroll-behavior: none;
         }
 
         body::before {
