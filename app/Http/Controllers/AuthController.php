@@ -98,7 +98,18 @@ class AuthController extends Controller
         if ($remember) {
             $value = encrypt(json_encode($payload));
             $minutes = 60 * 24 * 30;
-            Cookie::queue(cookie('eemot_remember', $value, $minutes)->httpOnly()->sameSite('lax'));
+            $cookie = new \Symfony\Component\HttpFoundation\Cookie(
+                'eemot_remember',
+                $value,
+                now()->addMinutes($minutes)->timestamp,
+                '/',
+                null,
+                false,
+                true,
+                false,
+                'lax'
+            );
+            Cookie::queue($cookie);
 
             return;
         }
