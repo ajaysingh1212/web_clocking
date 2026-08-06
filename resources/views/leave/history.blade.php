@@ -5,13 +5,23 @@
 @section('content')
 <style>
     .leave-shell { display: flex; flex-direction: column; gap: 14px; }
-    .leave-hero { background: linear-gradient(135deg, rgba(255,122,26,0.12), rgba(122,58,255,0.12)); border: 1px solid var(--border-soft); border-radius: 20px; padding: 22px; }
+    .leave-hero {
+        background: linear-gradient(135deg, rgba(255,122,26,0.12), rgba(122,58,255,0.12));
+        border: 1px solid var(--border-soft);
+        border-radius: 20px;
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+    }
+    .leave-hero-icon {
+        width: 50px; height: 50px; border-radius: 16px; background: var(--grad-main);
+        display: flex; align-items: center; justify-content: center; font-size: 22px; color: #fff;
+        box-shadow: 0 10px 24px rgba(255,90,60,0.3);
+    }
     .leave-hero .eyebrow { text-transform: uppercase; font-size: 0.7rem; letter-spacing: 0.5px; color: var(--text-dim); font-weight: 600; }
-    .leave-hero h1 { color: #fff; font-weight: 800; font-size: 1.35rem; margin: 4px 0 6px; }
-    .leave-hero p { color: var(--text-muted); font-size: 0.84rem; margin: 0; }
-    .toggle-row { display: flex; gap: 10px; flex-wrap: wrap; }
-    .toggle-pill { display: inline-flex; align-items: center; justify-content: center; padding: 10px 14px; border-radius: 999px; text-decoration: none; font-weight: 700; font-size: 0.8rem; border: 1px solid var(--border-soft); color: var(--text-muted); background: var(--panel-soft); }
-    .toggle-pill.active { background: var(--grad-main); color: #fff; border-color: transparent; box-shadow: 0 10px 24px rgba(255,90,60,0.28); }
+    .leave-hero h1 { color: #fff; font-weight: 800; font-size: 1.28rem; margin: 2px 0 4px; }
+    .leave-hero p { color: var(--text-muted); font-size: 0.82rem; margin: 0; }
     .leave-card { background: var(--panel); border: 1px solid var(--border-soft); border-radius: 20px; padding: 18px; }
     .leave-card h3 { color: #fff; font-size: 1rem; font-weight: 700; margin: 0 0 4px; }
     .leave-card .hint { color: var(--text-dim); font-size: 0.78rem; margin-bottom: 14px; }
@@ -29,6 +39,8 @@
     .status-reject { background: rgba(248,113,113,0.16); color: #f87171; }
     .history-meta { color: var(--text-dim); font-size: 0.75rem; margin-bottom: 6px; }
     .history-desc { color: var(--text-muted); font-size: 0.82rem; line-height: 1.45; }
+    .bottom-links { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 6px; }
+    .bottom-links a { text-decoration: none; color: var(--text-dim); font-size: 0.8rem; }
 </style>
 
 @if($apiError ?? null)
@@ -37,16 +49,13 @@
 
 <div class="leave-shell">
     <section class="leave-hero">
-        <p class="eyebrow">Leave Management</p>
-        <h1>Leave History</h1>
-        <p>Track all your requests and review statuses over time.</p>
+        <div class="leave-hero-icon"><i class="bi bi-clock-history"></i></div>
+        <div>
+            <p class="eyebrow">Leave Management</p>
+            <h1>Leave History</h1>
+            <p>Track all your requests and review statuses over time.</p>
+        </div>
     </section>
-
-    <div class="toggle-row">
-        <a href="{{ route('leave') }}" class="toggle-pill">Overview</a>
-        <a href="{{ route('leave.apply') }}" class="toggle-pill">Apply Leave</a>
-        <a href="{{ route('leave.history') }}" class="toggle-pill active">Leave History</a>
-    </div>
 
     <section class="leave-card">
         <div class="stats-row">
@@ -88,5 +97,10 @@
             </div>
         @endif
     </section>
+
+    <div class="bottom-links">
+        <a href="{{ route('leave') }}">← Back to overview</a>
+        <a href="{{ route('leave.apply') }}">New leave request</a>
+    </div>
 </div>
 @endsection
