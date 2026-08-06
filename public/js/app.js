@@ -2,6 +2,7 @@
     const loader = document.getElementById('page-loader');
     const forms = document.querySelectorAll('.needs-loader');
     const installButton = document.getElementById('install-button');
+    const installLink = document.getElementById('install-link');
     let deferredPrompt = null;
 
     forms.forEach((form) => {
@@ -22,17 +23,33 @@
         });
     }
 
+    function promptInstall() {
+        if (!deferredPrompt) {
+            return;
+        }
+
+        deferredPrompt.prompt();
+        deferredPrompt = null;
+    }
+
+    if (installButton) {
+        installButton.addEventListener('click', () => {
+            installButton.classList.add('d-none');
+            promptInstall();
+        });
+    }
+
+    if (installLink) {
+        installLink.addEventListener('click', () => {
+            promptInstall();
+        });
+    }
+
     window.addEventListener('beforeinstallprompt', (event) => {
         event.preventDefault();
         deferredPrompt = event;
         if (installButton) {
             installButton.classList.remove('d-none');
-            installButton.addEventListener('click', async () => {
-                installButton.classList.add('d-none');
-                deferredPrompt.prompt();
-                await deferredPrompt.userChoice;
-                deferredPrompt = null;
-            }, { once: true });
         }
     });
 })();
