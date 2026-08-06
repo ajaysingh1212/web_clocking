@@ -66,6 +66,11 @@ class ApiService
         return $this->guest()->get('all-notifications')->json() ?? [];
     }
 
+    public function leaveRequestsByUser(int|string $userId): array
+    {
+        return $this->request()->get("leave-requests-by-user/{$userId}")->json() ?? [];
+    }
+
     private function guest(): PendingRequest
     {
         return Http::baseUrl(config('services.eemot_api.base_url'))

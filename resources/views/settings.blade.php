@@ -359,7 +359,7 @@
             <i class="bi bi-chevron-right menu-chevron"></i>
         </a>
 
-        <a href="#" class="menu-item">
+        <a href="{{ route('leave') }}" class="menu-item">
             <div class="menu-left">
                 <i class="bi bi-calendar2-plus-fill menu-icon"></i>
                 <div class="menu-text">
