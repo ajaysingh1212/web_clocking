@@ -36,6 +36,13 @@ class ApiService
             ->json() ?? [];
     }
 
+    public function salaryDetails(int|string $userId, int|string $month, int|string $year): array
+    {
+        return $this->request()
+            ->get("salary/{$userId}/{$month}/{$year}")
+            ->json() ?? [];
+    }
+
     public function sendMonthlyAttendanceReport(int|string $userId, int|string $month, int|string $year, string $email): array
     {
         $response = $this->request()->post('attendance/send-monthly-report', [

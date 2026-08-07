@@ -30,6 +30,7 @@ Route::middleware('api.auth')->group(function (): void {
 
     Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
     Route::get('/settings/documents', [SettingsController::class, 'documents'])->name('settings.documents');
+    Route::get('/settings/salary', [SettingsController::class, 'salaryDetails'])->name('settings.salary');
     Route::get('/notifications', [SettingsController::class, 'notifications'])->name('notifications');
     Route::get('/leave', [SettingsController::class, 'leaveLanding'])->name('leave');
     Route::get('/leave/apply', [SettingsController::class, 'leaveApply'])->name('leave.apply');

@@ -85,6 +85,41 @@ class SettingsController extends Controller
         return view('settings.documents', compact('documents'));
     }
 
+    public function salaryDetails(Request $request, ApiService $api): View
+    {
+        $defaultMonth = now()->subMonth()->format('Y-m');
+        $selectedMonth = $request->query('month', $defaultMonth);
+
+        [$year, $month] = explode('-', $selectedMonth) + [null, null];
+        $salaryData = [];
+        $apiError = null;
+        $userId = authUserId();
+
+        if (! $userId) {
+            $apiError = 'Unable to determine your account. Please login again.';
+        } elseif (! $year || ! $month) {
+            $apiError = 'Invalid month selected. Please choose a valid month and year.';
+        } else {
+            try {
+                $response = $api->salaryDetails($userId, (int) $month, (int) $year);
+
+                if (! data_get($response, 'status', false)) {
+                    $apiError = data_get($response, 'message', 'Unable to load salary details.');
+                } else {
+                    $salaryData = data_get($response, 'data', []);
+                }
+            } catch (\Throwable $exception) {
+                $apiError = 'Unable to load salary details. Please try again later.';
+            }
+        }
+
+        return view('settings.salary', [
+            'selectedMonth' => $selectedMonth,
+            'salaryData' => $salaryData,
+            'apiError' => $apiError,
+        ]);
+    }
+
     public function emailReports(): View
     {
         $defaultMonth = now()->format('Y-m');
@@ -98,7 +133,6 @@ class SettingsController extends Controller
     public function sendEmailReport(Request $request, ApiService $api)
     {
         $request->validate([
-            'report_type' => ['required', 'in:attendance,salary'],
             'month' => ['required', 'date_format:Y-m'],
         ]);
 
@@ -120,20 +154,12 @@ class SettingsController extends Controller
         $apiResponse = [];
 
         try {
-            if ($request->input('report_type') === 'attendance') {
-                $apiResponse = $api->sendMonthlyAttendanceReport(
-                    $userId,
-                    (int) $month,
-                    (int) $year,
-                    $email
-                );
-            } else {
-                // salary report will be supported later with a different API endpoint
-                $apiResponse = [
-                    'success' => false,
-                    'message' => 'Salary slip report is not yet available. Please select Monthly Attendance Sheet for now.',
-                ];
-            }
+            $apiResponse = $api->sendMonthlyAttendanceReport(
+                $userId,
+                (int) $month,
+                (int) $year,
+                $email
+            );
         } catch (\Throwable $exception) {
             return back()->withInput()->with('error', 'Unable to send report. Please try again later.');
         }

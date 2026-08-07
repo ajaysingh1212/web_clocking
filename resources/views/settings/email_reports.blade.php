@@ -146,19 +146,11 @@
 
     <section class="docs-panel">
         <h3>Report Settings</h3>
-        <p>Choose the type of report, select the month, and confirm the recipient email address. Attendance reports are active now.</p>
+        <p>Select the month and confirm the recipient email address. Attendance report delivery is supported now.</p>
 
         <form method="POST" action="{{ route('settings.email-reports.send') }}" id="emailReportForm">
             @csrf
             <div class="form-grid">
-                <div class="form-field">
-                    <label for="report_type">Select Report</label>
-                    <select id="report_type" name="report_type" required class="styled-select">
-                        <option value="attendance" {{ old('report_type') === 'attendance' ? 'selected' : '' }}>Monthly Attendance Sheet</option>
-                        <option value="salary" {{ old('report_type') === 'salary' ? 'selected' : '' }}>Salary Slip (coming soon)</option>
-                    </select>
-                </div>
-
                 <div class="form-field">
                     <label for="month">Month</label>
                     <div id="monthContainer">
@@ -168,8 +160,8 @@
             </div>
 
             <div class="button-row">
-                <button type="submit" id="sendReportBtn" class="button-primary">Send Report</button>
-                <div class="note-box" id="reportNote">You can send the attendance report to your registered email. You can only send the same report once every 5 minutes.</div>
+                <button type="submit" id="sendReportBtn" class="button-primary">Send Attendance Report</button>
+                <div class="note-box" id="reportNote">You can send the attendance report to your registered email. You can only send it once every 5 minutes.</div>
             </div>
         </form>
 
