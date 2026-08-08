@@ -76,13 +76,69 @@ class SettingsController extends Controller
                 'file' => '#',
             ],
             [
+                'title' => 'Salary Slip',
+                'description' => 'Monthly salary slip document',
+                'file' => '#',
+            ],
+            [
                 'title' => 'Policy Letter',
                 'description' => 'Company policy document',
-                'file' => '#',
+                'file' => route('settings.policy.download'),
             ],
         ];
 
         return view('settings.documents', compact('documents'));
+    }
+
+    public function policyDownload(): \Illuminate\Http\Response
+    {
+        $pdfUrl = 'https://new.eemotclocking.in/terms/policy.pdf';
+
+        try {
+            $response = \Illuminate\Support\Facades\Http::timeout(30)->get($pdfUrl);
+        } catch (\Throwable $exception) {
+            abort(404, 'Policy document is not available right now.');
+        }
+
+        if (! $response->successful()) {
+            abort(404, 'Policy document is not available right now.');
+        }
+
+        return response($response->body(), 200)
+            ->header('Content-Type', $response->header('Content-Type') ?: 'application/pdf')
+            ->header('Content-Disposition', 'attachment; filename="policy.pdf"')
+            ->header('Cache-Control', 'no-store, no-cache, must-revalidate')
+            ->header('Pragma', 'no-cache');
+    }
+
+    public function salarySlipDownload(Request $request, ApiService $api)
+    {
+        $request->validate([
+            'month' => ['required', 'integer', 'between:1,12'],
+            'year' => ['required', 'integer', 'min:2000'],
+        ]);
+
+        $userId = (int) ($request->input('user_id') ?: authUserId() ?: 10);
+        $month = (int) $request->input('month');
+        $year = (int) $request->input('year');
+
+        try {
+            $response = $api->salarySlip($userId, $month, $year);
+        } catch (\Throwable $exception) {
+            return back()->withInput()->with('error', 'Unable to download salary slip. Please try again later.');
+        }
+
+        if (! $response->successful()) {
+            return back()->withInput()->with('error', 'Unable to download salary slip for the selected date.');
+        }
+
+        $fileName = sprintf('salary-slip-%s-%s-%s.pdf', $userId, $month, $year);
+
+        return response($response->body(), 200)
+            ->header('Content-Type', $response->header('Content-Type') ?: 'application/octet-stream')
+            ->header('Content-Disposition', 'attachment; filename="' . $fileName . '"')
+            ->header('Cache-Control', 'no-store, no-cache, must-revalidate')
+            ->header('Pragma', 'no-cache');
     }
 
     public function salaryDetails(Request $request, ApiService $api): View

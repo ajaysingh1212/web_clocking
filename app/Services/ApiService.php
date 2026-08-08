@@ -43,6 +43,12 @@ class ApiService
             ->json() ?? [];
     }
 
+    public function salarySlip(int|string $userId, int|string $month, int|string $year): Response
+    {
+        return $this->request()
+            ->get("salary-slip/{$userId}/{$month}/{$year}");
+    }
+
     public function sendMonthlyAttendanceReport(int|string $userId, int|string $month, int|string $year, string $email): array
     {
         $response = $this->request()->post('attendance/send-monthly-report', [

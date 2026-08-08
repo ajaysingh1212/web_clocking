@@ -240,8 +240,15 @@
                 showLoader();
             });
 
-            // Show loader on any form submit
-            document.addEventListener('submit', function () {
+            // Show loader on any form submit, except download and opt-out submissions
+            document.addEventListener('submit', function (event) {
+                const form = event.target;
+                if (!form || typeof form.matches !== 'function') return;
+
+                if (form.matches('[data-no-loader="true"]')) {
+                    return;
+                }
+
                 showLoader();
             });
 
