@@ -10,7 +10,9 @@
     $workMinutes = data_get($log, 'total_work_minutes') ?? data_get($record, 'working_minutes');
     $lateMinutes = data_get($log, 'late_by_minutes') ?? data_get($record, 'late_minutes');
     $status = ucfirst((string) (data_get($record, 'status') ?: 'Not marked'));
-    $punchImage = imageValue(data_get($record, 'punch_out_image')) ?? imageValue(data_get($record, 'punch_in_image'));
+    $punchInImage = imageValue(data_get($record, 'punch_in_image'));
+    $punchOutImage = imageValue(data_get($record, 'punch_out_image'));
+    $punchImage = $punchOutImage ?? $punchInImage;
 @endphp
 
 @section('content')
@@ -126,7 +128,7 @@
     .time-pair {
         display: flex;
         gap: 12px;
-        margin-top: 20px;
+        margin-top: 12px;
     }
 
     .time-pair > div {
@@ -136,6 +138,11 @@
         border-radius: 14px;
         padding: 14px;
         text-align: center;
+        min-height: 94px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
     }
 
     .time-pair i {
@@ -162,8 +169,8 @@
     .quick-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 10px;
-        margin-top: 16px;
+        gap: 12px;
+        margin-top: 12px;
     }
 
     .metric {
@@ -171,6 +178,10 @@
         border: 1px solid var(--border-soft);
         border-radius: 12px;
         padding: 12px 14px;
+        min-height: 76px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
     }
 
     .metric span {
@@ -233,48 +244,82 @@
         gap: 12px;
     }
 
-    .mini-panel {
-        background: var(--panel);
-        border: 1px solid var(--border-soft);
-        border-radius: 16px;
-        padding: 14px;
-        display: flex;
-        align-items: center;
-        gap: 14px;
+    .today-detail-card {
+        margin-top: 12px;
     }
 
-    .mini-panel i {
-        width: 44px; height: 44px;
-        border-radius: 12px;
+    .today-detail-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .today-detail-panel {
         background: var(--panel-soft);
-        color: var(--accent-orange);
+        border: 1px solid var(--border-soft);
+        border-radius: 14px;
+        padding: 10px 8px;
+    }
+
+    .today-detail-panel .panel-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 10px;
+    }
+
+    .today-detail-panel .panel-head span {
+        color: var(--text-dim);
+        font-size: 0.66rem;
+        text-transform: uppercase;
+        font-weight: 700;
+        letter-spacing: 0.75px;
+    }
+
+    .today-detail-panel .panel-head strong {
+        color: #fff;
+        font-size: 0.72rem;
+        font-weight: 700;
+    }
+
+    .today-detail-panel .panel-body {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .today-detail-panel .panel-body img {
+        width: 58px;
+        height: 58px;
+        border-radius: 10px;
+        object-fit: cover;
+        border: 1px solid rgba(255,255,255,0.12);
+        background: #111;
+    }
+
+    .today-detail-panel .panel-body .no-image {
+        width: 58px;
+        height: 58px;
+        border-radius: 10px;
+        border: 1px dashed var(--border-soft);
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 18px;
-        flex-shrink: 0;
-    }
-
-    .attendance-photo {
-        width: 44px; height: 44px;
-        border-radius: 12px;
-        object-fit: cover;
-        flex-shrink: 0;
-    }
-
-    .mini-panel span {
-        display: block;
         color: var(--text-dim);
-        font-size: 0.68rem;
-        text-transform: uppercase;
-        font-weight: 600;
-        margin-bottom: 2px;
+        font-size: 0.61rem;
+        text-align: center;
     }
 
-    .mini-panel strong {
+    .today-detail-panel .location-copy {
         color: #fff;
-        font-size: 0.85rem;
+        font-size: 0.72rem;
+        line-height: 1.34;
         word-break: break-word;
+    }
+
+    .today-detail-panel .location-copy.empty {
+        color: var(--text-dim);
+        font-style: italic;
     }
 </style>
 
@@ -344,6 +389,44 @@
         </div>
     </div>
 
+    <article class="today-detail-card">
+        <div class="today-detail-grid">
+            <section class="today-detail-panel">
+                <div class="panel-head">
+                    <span>Punch In</span>
+                    <strong>{{ $punchIn ? date('h:i A', strtotime($punchIn)) : '--:--' }}</strong>
+                </div>
+                <div class="panel-body">
+                    @if($punchInImage)
+                        <img src="{{ $punchInImage }}" alt="Punch-in image">
+                    @else
+                        <div class="no-image">No image</div>
+                    @endif
+                    <div class="location-copy {{ data_get($record, 'punch_in_location') ? '' : 'empty' }}">
+                        {{ data_get($record, 'punch_in_location') ?: 'No location captured' }}
+                    </div>
+                </div>
+            </section>
+
+            <section class="today-detail-panel">
+                <div class="panel-head">
+                    <span>Punch Out</span>
+                    <strong>{{ $punchOut ? date('h:i A', strtotime($punchOut)) : '--:--' }}</strong>
+                </div>
+                <div class="panel-body">
+                    @if($punchOutImage)
+                        <img src="{{ $punchOutImage }}" alt="Punch-out image">
+                    @else
+                        <div class="no-image">No image</div>
+                    @endif
+                    <div class="location-copy {{ data_get($record, 'punch_out_location') ? '' : 'empty' }}">
+                        {{ data_get($record, 'punch_out_location') ?: 'No location captured' }}
+                    </div>
+                </div>
+            </section>
+        </div>
+    </article>
+
     <div class="action-row">
         <a href="{{ route('punch') }}" class="btn btn-primary btn-lg">
             <i class="bi bi-camera-fill"></i>
@@ -353,25 +436,5 @@
             <i class="bi bi-arrow-clockwise"></i>
         </a>
     </div>
-</section>
-
-<section class="info-stack">
-    @if($punchImage)
-        <article class="mini-panel">
-            <img class="attendance-photo" src="{{ $punchImage }}" alt="Attendance photo">
-            <div>
-                <span>Latest Photo</span>
-                <strong>{{ $punchOut ? 'Punch out image' : 'Punch in image' }}</strong>
-            </div>
-        </article>
-    @endif
-
-    <article class="mini-panel">
-        <i class="bi bi-geo-alt-fill"></i>
-        <div>
-            <span>Last Location</span>
-            <strong>{{ data_get($record, 'punch_out_location') ?: data_get($record, 'punch_in_location') ?: 'No location yet' }}</strong>
-        </div>
-    </article>
 </section>
 @endsection

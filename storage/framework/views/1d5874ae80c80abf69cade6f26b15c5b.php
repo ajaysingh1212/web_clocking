@@ -219,9 +219,16 @@
         font-size: 0.8rem;
         font-weight: 700;
         color: #fff;
+        cursor: pointer;
     }
 
     .cal-cell.cal-blank { visibility: hidden; }
+
+    .cal-cell.has-detail:hover,
+    .cal-cell.has-detail:focus {
+        outline: 2px solid rgba(255,255,255,0.75);
+        transform: translateY(-2px);
+    }
 
     .cal-cell.cal-none {
         background: var(--panel-soft);
@@ -345,6 +352,253 @@
         word-break: break-word;
     }
 
+    .report-day-modal-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(3, 6, 10, 0.78);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 14px;
+        z-index: 2000;
+    }
+
+    .report-day-modal-backdrop.show {
+        display: flex;
+    }
+
+    .report-day-modal {
+        width: min(440px, 100%);
+        background: linear-gradient(180deg, rgba(30, 34, 50, 0.98), rgba(27, 29, 39, 0.98));
+        border: 1px solid var(--border-soft);
+        border-radius: 20px;
+        overflow: hidden;
+        color: #fff;
+        box-shadow: 0 14px 36px rgba(0, 0, 0, 0.75);
+    }
+
+    .report-day-modal-header {
+        padding: 14px 18px;
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        background: linear-gradient(135deg, #402473 0%, #2b2b54 100%);
+    }
+
+    .report-day-modal.report-status-present .report-day-modal-header {
+        background: linear-gradient(135deg, #3ac882 0%, #19b96f 100%);
+    }
+
+    .report-day-modal.report-status-absent .report-day-modal-header {
+        background: linear-gradient(135deg, #ff3d5a 0%, #bb1d39 100%);
+    }
+
+    .report-day-modal.report-status-leave .report-day-modal-header {
+        background: linear-gradient(135deg, #2f8fff 0%, #254eaf 100%);
+    }
+
+    .report-day-modal.report-status-half_time .report-day-modal-header,
+    .report-day-modal.report-status-half-time .report-day-modal-header {
+        background: linear-gradient(135deg, #ffb020 0%, #b96d00 100%);
+    }
+
+    .report-day-modal.report-status-holiday .report-day-modal-header {
+        background: linear-gradient(135deg, #b13cff 0%, #6f20b7 100%);
+    }
+
+    .report-day-modal.report-status-week_off .report-day-modal-header,
+    .report-day-modal.report-status-week-off .report-day-modal-header {
+        background: linear-gradient(135deg, #64748b 0%, #455061 100%);
+    }
+
+    .report-day-modal.report-status-none .report-day-modal-header {
+        background: linear-gradient(135deg, #4a5268 0%, #2f3442 100%);
+    }
+
+    .report-day-modal-header h3 {
+        margin: 0;
+        font-size: 1.14rem;
+        line-height: 1.12;
+        font-weight: 800;
+        color: #fff;
+    }
+
+    .report-day-modal-close {
+        border: 0;
+        background: transparent;
+        color: #aeb6d1;
+        font-size: 26px;
+        line-height: 1;
+        cursor: pointer;
+        padding: 2px 8px;
+        border-radius: 8px;
+    }
+
+    .report-day-modal-close:hover {
+        color: #fff;
+        background: rgba(255,255,255,0.08);
+    }
+
+    .report-day-modal-body {
+        padding: 14px;
+        background: linear-gradient(180deg, rgba(30, 33, 43, 0.98), rgba(27, 31, 42, 0.98));
+    }
+
+    .report-day-modal-status-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .report-day-modal-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 5px 10px;
+        border-radius: 999px;
+        font-weight: 700;
+        font-size: 0.66rem;
+        color: #fff;
+        background: var(--grad-main);
+        border: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .report-day-modal-type {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 5px 10px;
+        border-radius: 999px;
+        font-weight: 700;
+        font-size: 0.62rem;
+        letter-spacing: 0.55px;
+        border: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .report-day-modal-type-self {
+        background: rgba(58, 200, 130, 0.14);
+        color: #72f0a8;
+        border-color: rgba(58, 200, 130, 0.34);
+    }
+
+    .report-day-modal-type-admin {
+        background: rgba(255, 184, 77, 0.14);
+        color: #ffd46a;
+        border-color: rgba(255, 184, 77, 0.34);
+    }
+
+    .report-day-modal-type-manual {
+        background: rgba(112, 151, 255, 0.14);
+        color: #a8c2ff;
+        border-color: rgba(112, 151, 255, 0.34);
+    }
+
+    .report-day-modal-type-default {
+        background: rgba(255,255,255,0.08);
+        color: var(--text-dim);
+        border-color: rgba(255,255,255,0.12);
+    }
+
+    .report-day-modal-body .modal-date-row {
+        margin-top: 10px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .report-day-modal-body .modal-date-row .text-muted {
+        font-size: 0.72rem;
+        color: var(--text-dim);
+    }
+
+    .report-day-modal-body .badge {
+        font-size: 0.62rem;
+        padding: 4px 9px;
+        border-radius: 999px;
+        background: var(--panel-soft);
+        color: var(--text-dim);
+    }
+
+    .report-day-modal-body .modal-detail-grid {
+        margin-top: 10px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 9px;
+    }
+
+    .report-day-modal-body .modal-detail-panel {
+        border-radius: 10px;
+        border: 1px solid var(--border-soft);
+        background: var(--panel-soft);
+        padding: 9px;
+        min-height: 58px;
+    }
+
+    .report-day-modal-body .modal-detail-panel .label {
+        color: var(--text-dim);
+        font-size: 0.58rem;
+        text-transform: uppercase;
+        letter-spacing: 0.65px;
+    }
+
+    .report-day-modal-body .modal-detail-panel .value {
+        margin-top: 4px;
+        display: block;
+        color: #fff;
+        font-size: 0.68rem;
+        line-height: 1.28;
+        word-break: break-word;
+    }
+
+    .report-day-modal-body .modal-image-wrap {
+        margin-top: 10px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 9px;
+    }
+
+    .report-day-modal-body .modal-image-card {
+        border-radius: 10px;
+        background: var(--panel-soft);
+        border: 1px solid var(--border-soft);
+        padding: 8px;
+        min-height: 120px;
+    }
+
+    .report-day-modal-body .modal-image-card .img-title {
+        color: var(--text-dim);
+        font-size: 0.6rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        margin-bottom: 6px;
+        letter-spacing: 0.55px;
+    }
+
+    .report-day-modal-body .modal-image-card img {
+        width: 100%;
+        height: 110px;
+        object-fit: cover;
+        border-radius: 8px;
+        border: 1px solid rgba(255,255,255,0.14);
+        background: #111;
+    }
+
+    .report-day-modal-body .modal-image-card .no-image {
+        color: var(--text-dim);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 110px;
+        border-radius: 8px;
+        border: 1px dashed rgba(255,255,255,0.24);
+        font-size: 0.62rem;
+    }
+
     .empty-state {
         background: var(--panel);
         border: 1px solid var(--border-soft);
@@ -424,8 +678,15 @@
                             $rowStatus = strtolower((string) data_get($cell, 'row.status', ''));
                             $meta = $statusMeta[$rowStatus] ?? null;
                             $cellClass = $meta['class'] ?? 'cal-none';
+                            $calendarRow = data_get($cell, 'row');
+                            $rowJson = $calendarRow ? json_encode($calendarRow) : null;
+                            $hasDetail = !empty($calendarRow) && !empty(data_get($calendarRow, 'status'));
                         ?>
-                        <div class="cal-cell <?php echo e($cellClass); ?>" title="<?php echo e($meta['label'] ?? 'No data'); ?>">
+                        <div class="cal-cell <?php echo e($cellClass); ?> <?php echo e($hasDetail ? 'has-detail' : ''); ?>" title="<?php echo e($meta['label'] ?? 'No data'); ?>" tabindex="0" role="button"
+                             data-report-date="<?php echo e(data_get($cell, 'date')); ?>"
+                             data-report-status="<?php echo e(data_get($calendarRow, 'status') ?? ''); ?>"
+                             data-report-row='<?php echo e($rowJson); ?>'
+                             <?php if(!$hasDetail): ?> aria-disabled="true" <?php endif; ?>>
                             <?php echo e(str_pad($cell['day'], 2, '0', STR_PAD_LEFT)); ?>
 
                         </div>
@@ -507,6 +768,22 @@
     <?php endif; ?>
 </div>
 
+<div class="report-day-modal-backdrop" id="reportDayModalBackdrop">
+    <div class="report-day-modal" role="dialog" aria-modal="true" aria-labelledby="reportDayModalTitle">
+        <div class="report-day-modal-header">
+            <div>
+                <h3 id="reportDayModalTitle">Attendance Detail</h3>
+            </div>
+            <button type="button" class="report-day-modal-close" id="reportDayModalClose" aria-label="Close">&times;</button>
+        </div>
+        <div class="report-day-modal-body">
+            <div id="reportDayModalContent">
+                <div class="text-muted">Loading...</div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     function showReportTab(tab, btn) {
         document.getElementById('tab-days').style.display = tab === 'days' ? 'block' : 'none';
@@ -514,6 +791,203 @@
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
     }
+
+    function formatDateHuman(dateString) {
+        if (!dateString) return '-';
+        const date = new Date(dateString + 'T00:00:00');
+        if (Number.isNaN(date.getTime())) return dateString;
+        return date.toLocaleDateString(undefined, {
+            weekday: 'short',
+            day: 'numeric',
+            month: 'short',
+            year: 'numeric'
+        });
+    }
+
+    function formatTime(value) {
+        if (!value) return '--:--';
+        const date = new Date(value);
+        if (Number.isNaN(date.getTime())) return value;
+        return date.toLocaleTimeString(undefined, {
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    }
+
+    function openReportDayModal(detail) {
+        const modal = document.getElementById('reportDayModalBackdrop');
+        const modalPanel = modal ? modal.querySelector('.report-day-modal') : null;
+        const content = document.getElementById('reportDayModalContent');
+        const title = document.getElementById('reportDayModalTitle');
+        if (!modal || !modalPanel || !content || !title || !detail) {
+            return;
+        }
+
+        const status = String(detail.status || 'not_marked').toLowerCase();
+        const statusLabels = {
+            'present': 'Present',
+            'absent': 'Absent',
+            'leave': 'Leave',
+            'half_time': 'Half Time',
+            'holiday': 'Holiday',
+            'week_off': 'Week Off'
+        };
+
+        const modalStatusClass = {
+            'present': 'report-status-present',
+            'absent': 'report-status-absent',
+            'leave': 'report-status-leave',
+            'half_time': 'report-status-half_time',
+            'half-time': 'report-status-half_time',
+            'holiday': 'report-status-holiday',
+            'week_off': 'report-status-week_off',
+            'week-off': 'report-status-week_off'
+        };
+
+        modalPanel.classList.remove(
+            'report-status-present',
+            'report-status-absent',
+            'report-status-leave',
+            'report-status-half_time',
+            'report-status-holiday',
+            'report-status-week_off',
+            'report-status-none'
+        );
+
+        if (status && modalStatusClass[status]) {
+            modalPanel.classList.add(modalStatusClass[status]);
+        } else {
+            modalPanel.classList.add('report-status-none');
+        }
+
+        title.textContent = formatDateHuman(detail.date || detail.day || '');
+
+        if (!detail.status) {
+            content.innerHTML = `
+                <div class="report-day-modal-status-row">
+                    <div class="report-day-modal-status">No activity</div>
+                </div>
+                <div class="modal-detail-grid">
+                    <div class="modal-detail-panel">
+                        <span class="label">Punch In</span>
+                        <span class="value">--:--</span>
+                    </div>
+                    <div class="modal-detail-panel">
+                        <span class="label">Punch Out</span>
+                        <span class="value">--:--</span>
+                    </div>
+                </div>
+            `;
+            modal.classList.add('show');
+            return;
+        }
+
+        const punchInImage = detail.punch_in_image || '';
+        const punchOutImage = detail.punch_out_image || '';
+        const punchInTime = detail.punch_in_time ? detail.punch_in_time : '--:--';
+        const punchOutTime = detail.punch_out_time ? detail.punch_out_time : '--:--';
+        const punchInLocation = detail.punch_in_location || 'No location captured';
+        const punchOutLocation = detail.punch_out_location || 'No out location captured';
+        const label = statusLabels[status] || status.replace(/_/g, ' ');
+        const typeValue = String(detail.type || 'self').toLowerCase();
+        const typeMap = {
+            'self': { label: 'Self', className: 'report-day-modal-type-self' },
+            'admin': { label: 'Admin', className: 'report-day-modal-type-admin' },
+            'manual': { label: 'Manual', className: 'report-day-modal-type-manual' },
+            'manual_entry': { label: 'Manual', className: 'report-day-modal-type-manual' },
+            'employee': { label: 'Self', className: 'report-day-modal-type-self' }
+        };
+
+        const typeInfo = typeMap[typeValue] || {
+            label: typeValue ? typeValue.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()) : 'Self',
+            className: 'report-day-modal-type-default'
+        };
+
+        content.innerHTML = `
+            <div class="report-day-modal-status-row">
+                <div class="report-day-modal-status">${label}</div>
+                <div class="report-day-modal-type ${typeInfo.className}">${typeInfo.label}</div>
+            </div>
+            <div class="modal-detail-grid">
+                <div class="modal-detail-panel">
+                    <span class="label">Punch In Time</span>
+                    <span class="value">${punchInTime}</span>
+                </div>
+                <div class="modal-detail-panel">
+                    <span class="label">Punch Out Time</span>
+                    <span class="value">${punchOutTime}</span>
+                </div>
+                <div class="modal-detail-panel">
+                    <span class="label">Punch In Location</span>
+                    <span class="value">${punchInLocation}</span>
+                </div>
+                <div class="modal-detail-panel">
+                    <span class="label">Punch Out Location</span>
+                    <span class="value">${punchOutLocation}</span>
+                </div>
+            </div>
+            <div class="modal-image-wrap">
+                <div class="modal-image-card">
+                    <div class="img-title">Punch In Image</div>
+                    ${punchInImage ? `<img src="${punchInImage}" alt="Punch in image">` : `<div class="no-image">No punch-in image</div>`}
+                </div>
+                <div class="modal-image-card">
+                    <div class="img-title">Punch Out Image</div>
+                    ${punchOutImage ? `<img src="${punchOutImage}" alt="Punch out image">` : `<div class="no-image">No punch-out image</div>`}
+                </div>
+            </div>
+        `;
+
+        modal.classList.add('show');
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const modal = document.getElementById('reportDayModalBackdrop');
+        const closeButton = document.getElementById('reportDayModalClose');
+
+        document.querySelectorAll('[data-report-row]').forEach(function (cell) {
+            const row = cell.getAttribute('data-report-row');
+            if (!row || row === 'null') {
+                return;
+            }
+
+            const parsed = JSON.parse(row);
+            if (!parsed || !parsed.date || !parsed.status) {
+                return;
+            }
+
+            cell.addEventListener('click', function () {
+                openReportDayModal(parsed);
+            });
+
+            cell.addEventListener('keydown', function (event) {
+                if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    openReportDayModal(parsed);
+                }
+            });
+        });
+
+        if (closeButton && modal) {
+            closeButton.addEventListener('click', function () {
+                modal.classList.remove('show');
+            });
+        }
+
+        if (modal) {
+            modal.addEventListener('click', function (event) {
+                if (event.target === modal) {
+                    modal.classList.remove('show');
+                }
+            });
+
+            document.addEventListener('keydown', function (event) {
+                if (event.key === 'Escape' && modal.classList.contains('show')) {
+                    modal.classList.remove('show');
+                }
+            });
+        }
+    });
 </script>
 <?php $__env->stopSection(); ?>
 <?php echo $__env->make('layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\WebProjects\web_clocking\resources\views/report.blade.php ENDPATH**/ ?>
