@@ -518,7 +518,7 @@
         <div class="fields-card">
             <div class="field">
                 <span>User ID</span>
-                <input id="user_id" name="user_id" type="text" class="ghost-input" value="{{ old('user_id', authUserId()) }}" required>
+                <input id="user_id" name="user_id" type="text" inputmode="numeric" class="ghost-input" value="{{ old('user_id') }}" placeholder="Enter user ID" autocomplete="off" required>
             </div>
 
             <div class="field">
