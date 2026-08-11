@@ -199,10 +199,32 @@
     <div class="menu-list">
         <a href="#" class="menu-item">
             <div class="menu-left">
+                <i class="bi bi-calendar-day menu-icon"></i>
+                <div class="menu-text">
+                    <strong>Today Attendance</strong>
+                    <span>Show and inspect live daily attendance</span>
+                </div>
+            </div>
+            <i class="bi bi-chevron-right menu-chevron"></i>
+        </a>
+
+        <a href="#" class="menu-item">
+            <div class="menu-left">
                 <i class="bi bi-person-lines-fill menu-icon"></i>
                 <div class="menu-text">
-                    <strong>User Details</strong>
+                    <strong>Employee Details</strong>
                     <span>View &amp; edit raw user records</span>
+                </div>
+            </div>
+            <i class="bi bi-chevron-right menu-chevron"></i>
+        </a>
+
+        <a href="{{ route('developer.mark-attendance') }}" class="menu-item">
+            <div class="menu-left">
+                <i class="bi bi-pencil-square menu-icon"></i>
+                <div class="menu-text">
+                    <strong>Mark Attendance</strong>
+                    <span>Manually record attendance for users</span>
                 </div>
             </div>
             <i class="bi bi-chevron-right menu-chevron"></i>

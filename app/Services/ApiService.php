@@ -99,6 +99,25 @@ class ApiService
         ])->json() ?? [];
     }
 
+    public function manualAttendance(int|string $userId, string $date, string $action, string $time, float|string $latitude, float|string $longitude, string $location, UploadedFile $image): array
+    {
+        $request = $this->request()->attach(
+            'image',
+            file_get_contents($image->getRealPath()),
+            $image->getClientOriginalName()
+        );
+
+        return $request->post('https://new.eemotclocking.in/api/v1/attendance/manual', [
+            'user_id' => $userId,
+            'date' => $date,
+            'action' => $action,
+            'time' => $time,
+            'latitude' => $latitude,
+            'longitude' => $longitude,
+            'location' => $location,
+        ])->json() ?? [];
+    }
+
     public function product(int|string $id): array
     {
         return $this->request()->get("products/{$id}")->json() ?? [];

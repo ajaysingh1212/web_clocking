@@ -47,6 +47,8 @@ Route::middleware('api.auth')->group(function (): void {
     Route::get('/report/download', [ReportController::class, 'download'])->name('report.download');
 
     Route::get('/developer-options', [DeveloperController::class, 'index'])->name('developer.index');
+    Route::get('/developer/mark-attendance', [DeveloperController::class, 'markAttendance'])->name('developer.mark-attendance');
+    Route::post('/developer/mark-attendance', [DeveloperController::class, 'storeManualAttendance'])->name('developer.mark-attendance.store');
 
     // Sanket
 });
