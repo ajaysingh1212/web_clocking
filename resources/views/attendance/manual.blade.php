@@ -506,10 +506,10 @@
     <section class="capture-card">
         <img id="photo-preview" class="photo-preview" src="{{ asset('images/camera-placeholder.svg') }}" alt="Photo preview">
         <label class="capture-button" for="image">
-            <i class="bi bi-camera"></i>
-            Capture Photo
+            <i class="bi bi-image"></i>
+            Choose Photo
         </label>
-        <input class="visually-hidden" type="file" id="image" name="image" accept="image/*" capture="user" required>
+        <input class="visually-hidden" type="file" id="image" name="image" accept="image/*" required>
     </section>
 
     <section class="punch-panel">
